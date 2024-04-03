@@ -1,24 +1,15 @@
 package medium
 
-import "strings"
-
-func subPalindrome(s string, output *string, left, right int) {
-	strLen := len(s)
+func subPalindrome(s string, left, right int) string {
 	// spread to the left and right and check if the characters on the left and right are the same
-	for left >= 0 && right < strLen {
-		prev := s[left]
-		next := s[right]
-		if prev == next {
-			*output = string(prev) + *output + string(next)
-		} else {
-			break
-		}
+	for left >= 0 && right < len(s) && s[left] == s[right] {
 		left--
 		right++
 	}
+	return s[left+1 : right]
 }
 
-func maxStrLen(a, b string) string {
+func maxStr(a, b string) string {
 	if len(a) > len(b) {
 		return a
 	} else {
@@ -29,7 +20,7 @@ func maxStrLen(a, b string) string {
 func longestPalindrome(s string) string {
 	// recording the current longest
 	longestStr := ""
-	for i, v := range s {
+	for i := range s {
 		// odd number
 		// initialize the current string with the current character
 		// e.g.
@@ -37,8 +28,7 @@ func longestPalindrome(s string) string {
 		// oddCurStr = "b"
 		// left = 0, right = 2
 		// prev = a, next = a
-		oddCurStr := string(v)
-		subPalindrome(s, &oddCurStr, i-1, i+1)
+		oddCurStr := subPalindrome(s, i, i)
 
 		// even number
 		// initialize the current string with ""
@@ -48,12 +38,10 @@ func longestPalindrome(s string) string {
 		// left = 1, right = 2
 		// 1st round: prev = b, next = b
 		// 2nd round: prev = a, next = a
-		evenCurStr := ""
-		subPalindrome(s, &evenCurStr, i, i+1)
+		evenCurStr := subPalindrome(s, i, i+1)
 
 		// update the longest string
-		longerStr := maxStrLen(evenCurStr, oddCurStr)
-		longestStr = strings.Clone(maxStrLen(longerStr, longestStr))
+		longestStr = maxStr(longestStr, maxStr(evenCurStr, oddCurStr))
 	}
 	return longestStr
 }
