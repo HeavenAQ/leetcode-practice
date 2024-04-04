@@ -10,6 +10,7 @@ func LongestSubstringLength(s string) int {
 	appeared := make(map[rune]int)
 
 	for i, v := range s {
+		// sliding window: [curStartIdx, i]
 		if prevIdx, exists := appeared[v]; exists && prevIdx >= curStartIdx {
 			// If the character exists and is within the current substring,
 			// move the start right after the previous occurrence of `v`
